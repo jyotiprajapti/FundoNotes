@@ -1,13 +1,20 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import MyInput from '../../components/MyInput';
 import theme from '../../utilities/StylingConstants';
 import MyButton from '../../components/MyButton';
 import Register from './Register';
+import {AuthContext} from '../../navigation/AutenticationProvider';
+import {FirebaseValidation} from '../../validations/FirebaseValidation';
+import {CustomExeceptions} from '../../exceptions/CustomExceptions';
+import GoogleLoginButton from '../../components/GoogleLoginButton';
 const Login = props => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(true);
+  const {login, exception} = useContext(AuthContext);
+  const {googleSignIn} = useContext(AuthContext);
+  const catchError = (code) => {setError(code)};
 
   const isValidate = () => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -28,17 +35,16 @@ const Login = props => {
       temp.password =
         'Enter a valid password with a digit, Upper case, Lower case, special character, and atleast 8 characters';
     }
-
     setError(temp);
-
     return isValid;
   };
-
   const handleLogin = () => {
     if (isValidate()) {
-      console.log('User Login Successfully');
+      login(email,password,catchError);
+    
+      }
+      console.log('logged in successfully');
     }
-  };
 
   return (
     <View style={styles.container}>
@@ -59,6 +65,8 @@ const Login = props => {
       <Text style={{color: 'red'}}>{error.password}</Text>
 
       <MyButton btnLabel={'Login'} onPress={handleLogin} />
+
+      <GoogleLoginButton onPress = {googleSignIn} btnLabel = "Google" />
       <Text>New User?</Text>
       <TouchableOpacity onPress={() => props.navigation.navigate('Register')}>
         <Text style={styles.text2}>Register</Text>

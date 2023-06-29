@@ -4,13 +4,13 @@ const palette = {
   purple: '#3d1a4a',
   black: '#0B0B0B',
   white: '#F0F2F3',
-  lightPurple: '#bb8bcc',
+  lightPurple: '#b49cdc',
   pink: '#e0a2b8',
   green: '#b0cca3',
   red: 'red',
   font: 'rgba(0,0,0,0.8)',
   grey: 'grey',
-  blue:'1e20ff'
+  blue:'#1e20ff'
 };
 
 export default theme = {
@@ -29,7 +29,7 @@ export default theme = {
     xs:2,
     s: 10,
     m: 16,
-    l: 24,
+    l: 20,
     xl: 40,
   },
   textVariants: {
@@ -45,10 +45,19 @@ export default theme = {
   },
   height: {
     primary: verticalScale(30),
+    secondary: verticalScale(590),
     radius: 30,
+    bottomBar: verticalScale(50)
   },
   width: {
     width: horizontalScale(250),
-    widthButton: horizontalScale(180)
+    widthButton: horizontalScale(180),
+    width2: horizontalScale(320),
   },
+  icon:{
+    smallIcon: 20,
+    mediumIcon: 26,
+    bigIcon: horizontalScale(100)
+
+  }
 };

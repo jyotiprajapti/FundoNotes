@@ -1,15 +1,18 @@
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import theme from '../../utilities/StylingConstants';
 import MyButton from '../../components/MyButton';
 import MyInput from '../../components/MyInput';
+import {AuthContext} from '../../navigation/AutenticationProvider';
+import GoogleLoginButton from '../../components/GoogleLoginButton';
 const Register = props => {
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(true);
-
+  const [error, setError] = useState({});
+  const {register} = useContext(AuthContext);
+  const {googleSignIn} = useContext(AuthContext);
   const isValidate = () => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordPattern =
@@ -37,7 +40,7 @@ const Register = props => {
 
   const handleLogin = () => {
     if (isValidate()) {
-      console.log('User Registered Successfully');
+      register(email, password,fullName,phoneNumber);
     }
   };
 
@@ -49,7 +52,7 @@ const Register = props => {
         value={email}
         onChangeText={text => setEmail(text)}
       />
-      <Text style={{color: 'red'}}>{error.email}</Text>
+      {error && <Text style={{color: 'red'}}>{error.email}</Text>}
 
       <MyInput
         placeHolder="Full Name"
@@ -74,6 +77,7 @@ const Register = props => {
       />
       <Text style={{color: 'red'}}>{error.password}</Text>
       <MyButton btnLabel={'Register'} onPress={handleLogin} />
+      <GoogleLoginButton  onPress={googleSignIn}  btnLabel='Register' />
       <Text>Already have an account?</Text>
       <TouchableOpacity onPress={() => props.navigation.navigate('Login')}>
         <Text style={styles.text2}>Login</Text>

@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "84083558163-ev2hobpcnlvvup4no81b1jdjmeplrig5.apps.googleusercontent.com",
+          "client_id": "84083558163-ed7tja7jugtm2g8gtto0ffoj8e2jc97n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fundonotes",
+            "certificate_hash": "0c45da6db5d1f37303b45b7aa5302d5b7289aa37"
+          }
+        },
+        {
+          "client_id": "84083558163-2esdi3seifn6c9ls1pb2uclbg6kj8tuc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "84083558163-ev2hobpcnlvvup4no81b1jdjmeplrig5.apps.googleusercontent.com",
+              "client_id": "84083558163-2esdi3seifn6c9ls1pb2uclbg6kj8tuc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
