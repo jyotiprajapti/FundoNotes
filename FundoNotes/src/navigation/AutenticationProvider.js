@@ -1,10 +1,7 @@
 import {StyleSheet} from 'react-native';
 import React, {createContext, useState} from 'react';
 import auth from '@react-native-firebase/auth';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {FirebaseValidation} from '../validations/FirebaseValidation';
 import {CustomExeceptions} from '../exceptions/CustomExceptions';
 import {firebaseException} from '../exceptions/ExceptionConstants';
@@ -61,11 +58,9 @@ export const AutenticationProvider = ({children}) => {
         googleSignIn: async () => {
           try {
             const {idToken} = await GoogleSignin.signIn();
-
-            // Create a Google credential with the token
             const googleCredential =
               auth.GoogleAuthProvider.credential(idToken);
-              await auth().signInWithCredential(googleCredential);
+            await auth().signInWithCredential(googleCredential);
               
           } catch (error) {
             console.log(error);

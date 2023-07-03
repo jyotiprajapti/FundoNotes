@@ -1,7 +1,7 @@
 import {verticalScale, horizontalScale} from './ScaleComponent';
 
 const palette = {
-  purple: '#3d1a4a',
+  purple: '#5e3173',
   black: '#0B0B0B',
   white: '#F0F2F3',
   lightPurple: '#b49cdc',
@@ -31,6 +31,7 @@ export default theme = {
     m: 16,
     l: 20,
     xl: 40,
+    xxl:50
   },
   textVariants: {
     header: {

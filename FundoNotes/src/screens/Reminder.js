@@ -3,15 +3,15 @@ import {
     StyleSheet,
     ScrollView,
   } from 'react-native';
-  import Footer from './components/Footer';
-  import TopBar from './components/TopBar';
-  import ReminderIcon from './components/ReminderIcon';
-  const App = () => {
+  import Footer from '../components/Footer';
+  import TopBar from '../components/TopBar';
+  import ReminderIcon from '../components/ReminderIcon';
+  const Reminder = (navigation) => {
     const notes = [];
     return (
       <View style={styles.constainer}>
         <View style={styles.header}>
-          <TopBar />
+          <TopBar navigation={navigation} />
         </View>
         <View style={styles.content}>
           <ScrollView>
@@ -43,4 +43,4 @@ import {
   
     },
   });
-  export default App;
+  export default Reminder;

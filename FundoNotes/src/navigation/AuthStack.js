@@ -2,14 +2,15 @@ import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 import {AutenticationProvider} from './AutenticationProvider';
-import {GoogleSignin} from '@react-native-community/google-signin'
+import {GoogleSignin} from '@react-native-google-signin/google-signin'
 import Login from '../screens/auth/Login';
 import Register from '../screens/auth/Register';
 const AuthStack = () => {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId:
-        '84083558163-2esdi3seifn6c9ls1pb2uclbg6kj8tuc.apps.googleusercontent.com',
+      "84083558163-ev2hobpcnlvvup4no81b1jdjmeplrig5.apps.googleusercontent.com",
+        offlineAccess : true,
     });
   }, []);
   return (

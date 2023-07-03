@@ -24,7 +24,7 @@ return subscriber;
   return(
     
       <NavigationContainer>
-        
+       
         {user?<AppStack/>:<AuthStack/>}
     </NavigationContainer>
     
