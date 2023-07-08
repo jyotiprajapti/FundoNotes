@@ -1,18 +1,31 @@
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import Feather from 'react-native-vector-icons/Feather'
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
 import theme from '../utilities/StylingConstants';
-const Footer = () => {
+const Footer = (props) => {
+  
   return (
     <View style={styles.container}>
       <View style={styles.icons}>
-        <Feather name="check-square" size={theme.icon.smallIcon} color="black" />
+        <Feather
+          name="check-square"
+          size={theme.icon.smallIcon}
+          color="black"
+        />
         <Feather name="edit-3" size={theme.icon.smallIcon} color="black" />
 
         <Feather name="mic" size={theme.icon.smallIcon} color="black" />
         <Feather name="image" size={theme.icon.smallIcon} color="black" />
       </View>
-      <TouchableOpacity style={styles.button}>
-        <Feather name="plus-square" size={theme.icon.mediumIcon} color="black" />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => props.navigation.navigate('CreateNote',{
+          data:props.notesData
+        })}>
+        <Feather
+          name="plus-square"
+          size={theme.icon.mediumIcon}
+          color="black"
+        />
       </TouchableOpacity>
     </View>
   );
@@ -42,6 +55,6 @@ const styles = StyleSheet.create({
   icons: {
     flexDirection: 'row',
     paddingHorizontal: 5,
-    gap: 10
+    gap: 10,
   },
 });

@@ -2,7 +2,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import theme from '../utilities/StylingConstants';
 import Feather from 'react-native-vector-icons/Feather';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 const CustomDrawer = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -52,7 +52,7 @@ const CustomDrawer = ({navigation}) => {
       <TouchableOpacity
         style={styles.menuItem}
         onPress={() => navigation.navigate('Deleted')}>
-        <Feather
+        <AntDesign
           name="delete"
           size={theme.icon.smallIcon}
           color={theme.colors.background}

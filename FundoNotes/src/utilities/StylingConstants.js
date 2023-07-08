@@ -26,12 +26,12 @@ export default theme = {
 
   },
   spacing: {
-    xs:2,
+    xs:5,
     s: 10,
     m: 16,
-    l: 20,
+    l: 22,
     xl: 40,
-    xxl:50
+    xxl:75
   },
   textVariants: {
     header: {
@@ -47,13 +47,16 @@ export default theme = {
   height: {
     primary: verticalScale(30),
     secondary: verticalScale(590),
+    secondary2: verticalScale(550),
     radius: 30,
-    bottomBar: verticalScale(50)
+    bottomBar: verticalScale(50),
+    secondary3: verticalScale(100)
   },
   width: {
     width: horizontalScale(250),
     widthButton: horizontalScale(180),
     width2: horizontalScale(320),
+    width3: horizontalScale(160),
   },
   icon:{
     smallIcon: 20,

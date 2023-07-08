@@ -5,8 +5,6 @@ import theme from '../../utilities/StylingConstants';
 import MyButton from '../../components/MyButton';
 import Register from './Register';
 import {AuthContext} from '../../navigation/AutenticationProvider';
-import {FirebaseValidation} from '../../validations/FirebaseValidation';
-import {CustomExeceptions} from '../../exceptions/CustomExceptions';
 import GoogleLoginButton from '../../components/GoogleLoginButton';
 const Login = props => {
   const [email, setEmail] = useState('');

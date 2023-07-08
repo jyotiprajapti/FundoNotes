@@ -1,62 +1,115 @@
-import React, {useState,useContext} from 'react';
-import { AuthContext } from '../navigation/AutenticationProvider';
-import { Modal, StyleSheet, Text, Pressable, View,Image} from 'react-native';
-import theme from '../utilities/StylingConstants'
+import React, {useState, useContext, useEffect, useCallback} from 'react';
+import {Modal, StyleSheet, Text, Pressable, View, Image} from 'react-native';
+import theme from '../utilities/StylingConstants';
+import storage from '@react-native-firebase/storage';
+import ImagePicker from 'react-native-image-crop-picker';
+import {AuthContext} from '../navigation/AutenticationProvider';
+import {fetchUser, updateUser} from '../services/UserServices';
 import Modal2 from './Modal2';
-const Modal1 = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [showNewModal, setShowNewModal] = useState(false);
-  const {logout} = useContext(AuthContext);
-  const openNewModal = () => {
-    setShowNewModal(true);
+const Modal1 = ({modalVisible, setModalVisible}) => {
+  const {logout, user} = useContext(AuthContext);
+  const [userdata, setUserData] = useState({});
+  const [isVisible, setIsVisible] = useState(false);
+  const [profile, setProfile] = useState('');
+  const handleModal = () => {
+    setIsVisible(!isVisible);
   };
 
-  const closeNewModal = () => {
-    setShowNewModal(false);
+  const getUser = async () => {
+    console.log('user', user);
+    const userDetails = await fetchUser(user.uid);
+    setUserData(userDetails);
+    setProfile(userDetails?.profilePic)
   };
-  
+
+  useEffect(() => {
+    getUser();
+  }, []);
+  const pickImage = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      setProfile(image.path);
+      submitImage(image.path);
+    });
+  };
+
+  const openCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+    }).then(image => {
+      setProfile(image.path);
+      submitImage();
+    });
+  };
+  console.log("profile from modal", profile)
+  const submitImage = async () => {
+    const uploadUri = profile;
+    let fileName = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+
+    try {
+      await storage.ref(fileName).putFile(uploadUri);
+
+      const url = storage.ref(fileName).getDownloadURL();
+      updateUser(user.uid, url);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <View style={styles.centeredView}>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-          <Image
-          source={require('../utilities/images/ProfilePic.jpeg')}
-          style={styles.image2}
-        />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Take photo</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() =>openNewModal}>
-              <Text style={styles.textStyle}>Upload photo</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={()=>logout()}>
-              <Text style={styles.textStyle}>Logout</Text>
-            </Pressable>
+      {!isVisible ? (
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={setModalVisible}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              {user?.photoURL ? (
+                <Image style={styles.image2} source={{uri: user?.photoURL}} />
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    handleModal();
+                  }}>
+                  <Image
+                    style={styles.image2}
+                    source={
+                      profile
+                        ? {uri: profile}
+                        : require('../utilities/images/ProfilePic.jpeg')
+                    }
+                  />
+                </Pressable>
+              )}
+              <Text style={styles.modalText}>
+                {userdata ? userdata?.fullName : user?.displayName}
+              </Text>
+              <Text style={styles.modalText}>
+                {userdata ? userdata?.email : user?.email}
+              </Text>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => logout()}>
+                <Text style={styles.textStyle}>Logout</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-              <Modal2 visible={showNewModal} onClose={closeNewModal}/>
-
-      </Modal>
-      <Pressable
-        onPress={() => setModalVisible(true)}>
-        <Image
-          source={require('../utilities/images/ProfilePic.jpeg')}
-          style={styles.image}
+        </Modal>
+      ) : (
+        <Modal2
+          openCamera={openCamera}
+          pickImage={pickImage}
+          visible={isVisible}
+          onRequestClose={handleModal}
         />
-      </Pressable>
+      )}
     </View>
   );
 };
@@ -70,7 +123,7 @@ const styles = StyleSheet.create({
   modalView: {
     backgroundColor: 'white',
     borderRadius: 20,
-    paddingHorizontal: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.xxl,
     alignItems: 'center',
     shadowColor: theme.colors.text1,
     shadowOffset: {
@@ -84,14 +137,14 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 20,
     elevation: 2,
-    padding: theme.spacing.s
+    padding: theme.spacing.s,
   },
   buttonOpen: {
     backgroundColor: theme.colors.foreground,
   },
   buttonClose: {
     backgroundColor: theme.colors.foreground,
-    marginBottom: theme.spacing.m
+    marginBottom: theme.spacing.m,
   },
   textStyle: {
     color: 'white',
@@ -101,6 +154,10 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: theme.spacing.s,
     textAlign: 'center',
+    color: theme.colors.foreground,
+    padding: theme.spacing.s,
+    fontWeight: 'bold',
+    fontSize: theme.spacing.m,
   },
   image: {
     width: theme.spacing.l,
@@ -109,11 +166,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   image2: {
-    width: theme.spacing.xxl,
-    height: theme.spacing.xxl,
+    width: 100,
+    height: 100,
     borderRadius: 100,
-    alignSelf: 'center',
-    margin: theme.spacing.l
+    borderWidth: 0.3,
+    borderColor: theme.colors.background,
+    margin: theme.spacing.l,
   },
 });
 

@@ -1,16 +1,11 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Feather from 'react-native-vector-icons/Feather';
-import Notes from '../screens/Notes';
-import Reminder from '../screens/Reminder';
 import theme from '../utilities/StylingConstants';
-import CreateNewLabel from '../screens/CreateNewLabel';
-import Archive from '../screens/Archive';
-import Deleted from '../screens/Deleted';
-import Settings from '../screens/Settings';
 import CustomDrawer from '../components/CustomDrawer';
+import CreateNote from '../screens/CreateNote';
 const Stack = createNativeStackNavigator();
 import AppDrawer from './AppDrawer';
+import Search from '../screens/Search';
 const AppStack = () => {
   return (
     <Stack.Navigator
@@ -27,7 +22,16 @@ const AppStack = () => {
         component={AppDrawer}
         options={{header: () => null}}
       />
-
+      <Stack.Screen
+        name="CreateNote"
+        component={CreateNote}
+        options={{header: () => null}}
+      />
+      <Stack.Screen
+        name="Search"
+        component={Search}
+        options={{header: () => null}}
+      />
     </Stack.Navigator>
   );
 };

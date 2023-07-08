@@ -11,7 +11,7 @@ import {
     return (
       <View style={styles.constainer}>
         <View style={styles.header}>
-          <TopBar navigation={navigation} />
+          <TopBar navigation={navigation} searchPhrase = 'Search your note here' />
         </View>
         <View style={styles.content}>
           <ScrollView>
@@ -20,7 +20,7 @@ import {
         </View>
         <View style={styles.footer}>
           
-          <Footer />
+          <Footer navigation = {navigation} />
         </View>
       </View>
     );

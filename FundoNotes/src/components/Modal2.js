@@ -1,34 +1,52 @@
 import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
-import Feather from 'react-native-vector-icons/Feather'
-const Modal2 = ({ visible, onClose }) => {
-  
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
+import theme from '../utilities/StylingConstants';
+const Modal2 = ({visible, onRequestClose,pickImage,openCamera}) => {
+  const [selectImage, setSelectImage] = useState('');
+
   return (
-    <View style={styles.centeredView}>
+    <View style={{}}>
       <Modal
         animationType="fade"
         transparent={true}
         visible={visible}
-        >
+        onRequestClose={onRequestClose}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Feather name="edit-3" size={theme.icon.smallIcon} color="black" />
-            <Text style={styles.modalText}>Add Image</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
-
-              <Text style={styles.textStyle}>Choose image</Text>
-            </Pressable>
-            <Pressable
-        style={[styles.button, styles.buttonOpen]}
-        onPress={onClose}>
-        <Text style={styles.textStyle}>Hide</Text>
-      </Pressable>
+            <View style={styles.view3}>
+              <Text style={styles.modalText}>Add Image</Text>
+            </View>
+            <TouchableOpacity
+              style={[styles.button]}
+              onPress={openCamera}>
+              <Feather
+                name="camera"
+                size={theme.icon.smallIcon}
+                color="black"
+                style={styles.icons}
+              />
+              <Text style={styles.textStyle2}>Open camera</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.button]} onPress={ pickImage}>
+              <Feather
+                name="camera"
+                size={theme.icon.smallIcon}
+                color="black"
+                style={styles.icons}
+              />
+              <Text style={styles.textStyle2}>Choose image</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
-      
     </View>
   );
 };
@@ -38,13 +56,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
+    marginTop: theme.spacing.s,
   },
   modalView: {
-    margin: 20,
+    margin: theme.spacing.m,
     backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
+    borderRadius: theme.spacing.m,
+    padding: theme.spacing.xl,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -56,24 +74,39 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+    borderRadius: theme.spacing.l,
+    padding: theme.spacing.s,
+    margin: theme.spacing.xs,
+    flexDirection: 'row',
+    borderColor: theme.colors.foreground,
+    borderWidth: 0.8,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: theme.colors.foreground,
   },
   textStyle: {
-    color: 'white',
+    color: theme.colors.background,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: theme.spacing.m,
+  },
+  modalText: {
+    marginBottom: theme.spacing.s,
+    textAlign: 'center',
+    color: theme.colors.placeHolder,
+    fontWeight: 'bold',
+    fontSize: theme.spacing.l,
+  },
+  view3: {
+    flexDirection: 'row',
+  },
+  textStyle2: {
+    color: theme.colors.placeHolder,
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+  icons: {
+    paddingRight: theme.spacing.s,
   },
 });
 
