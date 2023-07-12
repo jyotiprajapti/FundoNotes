@@ -15,16 +15,12 @@ import EmptyIcon from '../components/EmptyIcon';
 import {fetchNote} from '../services/NoteServices';
 import NoteCard from '../components/NoteCard';
 import {FlatList} from 'react-native-gesture-handler';
+import { useSelector } from 'react-redux';
 const Notes = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const [show, setShow] = useState(true);
   const [notes, setNotes] = useState([]);
   const [pinNotes, setPinNotes] = useState([]);
-  const [toggle, setToggle] = useState(false);
-  const handleToggle = () => {
-    setToggle(!toggle);
-  };
-
   const getNotes = async () => {
     const notesData = await fetchNote(user.uid);
     const pin = notesData.filter(
@@ -36,7 +32,9 @@ const Notes = ({navigation}) => {
     );
     setNotes(other);
     setShow(false);
-  };
+  }; 
+
+const toggle = useSelector (state=>state.reducer.toggle)
 
   const handleEditNote = item => {
     setShow(true);
@@ -48,7 +46,6 @@ const Notes = ({navigation}) => {
 
   const getUser = async () => {
     const userDetails = await fetchUser(user.uid);
-    console.log(userDetails);
   };
 
   useEffect(() => {
@@ -62,9 +59,8 @@ const Notes = ({navigation}) => {
       <View style={styles.header}>
         <TopBar
           searchPhrase="Search your note here"
+          targetScreen= 'Search'
           navigation={navigation}
-          handleToggle={handleToggle}
-          toggle={toggle}
         />
       </View>
       <View style={styles.content}>
@@ -73,11 +69,10 @@ const Notes = ({navigation}) => {
         ) : (
           <ScrollView nestedScrollEnabled={true}>
             <View>
-              <ActivityIndicator
+              {show &&<ActivityIndicator
                 size={'large'}
-                animating={show}
                 color={'pink'}
-              />
+              />}
               {pinNotes && <Text style={styles.heading}>Pinned</Text>}
               <FlatList
                 data={pinNotes}
@@ -89,18 +84,17 @@ const Notes = ({navigation}) => {
                     onPress={() => handleEditNote(item)}
                     
                     style={toggle && styles.rowContainer}>
-                    <NoteCard {...item} toggle={toggle} />
+                    <NoteCard {...item} toggle = {toggle} />
                   </TouchableOpacity>
                 )}
               />
             </View>
 
             <View>
-              <ActivityIndicator
+              {show && <ActivityIndicator
                 size={'large'}
-                animating={show}
                 color={'pink'}
-              />
+              />}
               {pinNotes && <Text style={styles.heading}>Other</Text>}
 
               <FlatList

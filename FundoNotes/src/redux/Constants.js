@@ -1,0 +1,3 @@
+export const TOGGLE_GRID_LABEL_VIEW = "TOGGLE_GRID_LABEL_VIEW"
+export const LABEL_DATA = "LABEL_DATA"
+ 

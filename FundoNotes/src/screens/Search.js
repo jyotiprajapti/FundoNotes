@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View, TextInput,FlatList,TouchableOpacity} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
-import {AuthContext} from '../navigation/AutenticationProvider';
+import { AuthContext } from '../navigation/AutenticationProvider';
 import {fetchNote} from '../services/NoteServices';
 import theme from '../utilities/StylingConstants';
 import NoteCard from '../components/NoteCard';

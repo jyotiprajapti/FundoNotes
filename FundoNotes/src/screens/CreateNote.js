@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import theme from '../utilities/StylingConstants';
@@ -33,7 +32,7 @@ const CreateNote = ({navigation, route}) => {
   const handlePinClick = () => {
     setPinData(!pinData);
   };
-  console.log('ntes data..', notesData);
+
   const handleArchiveClick = () => {
     setArchiveData(!archiveData);
   };
@@ -75,7 +74,7 @@ const CreateNote = ({navigation, route}) => {
 
   const handleDeleteForever = () => {
     deleteNote(user.uid, noteId);
-    console.log('delete forever called');
+   
     navigation.navigate('Home');
   };
 
@@ -83,7 +82,7 @@ const CreateNote = ({navigation, route}) => {
     setModalVisible(!modalVisible);
   };
 
-  console.log('delet data....', deleteData);
+  
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -113,7 +112,7 @@ const CreateNote = ({navigation, route}) => {
       </View>
       <View>
        
-        <ActivityIndicator size={'large'} animating={show} />
+      
       </View>
 
       <View style={styles.content}>
@@ -165,6 +164,7 @@ const CreateNote = ({navigation, route}) => {
               onRequestClose={handleModalVisible}
               visible={modalVisible}
               handleDelete={handleDelete}
+              navigation={navigation}
             />
           ) : (
             <Modal4

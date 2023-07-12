@@ -6,12 +6,12 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import theme from '../utilities/StylingConstants';
-import { useNavigation } from '@react-navigation/native';
-const Modal3 = ({visible, onRequestClose,handleDelete}) => {
+import LabelSelect from '../screens/LabelSelect';
+const Modal3 = ({visible, onRequestClose,handleDelete,navigation}) => {
 
   return (
     <View style={styles.centerdView}>
@@ -56,9 +56,9 @@ const Modal3 = ({visible, onRequestClose,handleDelete}) => {
               />
               <Text style={styles.text}>Collaborator</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.touchable}>
-              <Feather
-                name="plus"
+            <TouchableOpacity style={styles.touchable} onPress={()=>navigation.navigate(LabelSelect)} >
+              <MaterialCommunityIcons
+            name="label-outline"
                 size={theme.icon.smallIcon}
                 color={theme.colors.text1}
               />

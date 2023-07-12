@@ -16,7 +16,7 @@ const Modal1 = ({modalVisible, setModalVisible}) => {
   };
 
   const getUser = async () => {
-    console.log('user', user);
+ 
     const userDetails = await fetchUser(user.uid);
     setUserData(userDetails);
     setProfile(userDetails?.profilePic)
@@ -46,7 +46,6 @@ const Modal1 = ({modalVisible, setModalVisible}) => {
       submitImage();
     });
   };
-  console.log("profile from modal", profile)
   const submitImage = async () => {
     const uploadUri = profile;
     let fileName = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);

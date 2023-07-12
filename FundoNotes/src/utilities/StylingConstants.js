@@ -5,7 +5,7 @@ const palette = {
   black: '#0B0B0B',
   white: '#F0F2F3',
   lightPurple: '#b49cdc',
-  pink: '#e0a2b8',
+  pink: '#ebbcc9',
   green: '#b0cca3',
   red: 'red',
   font: 'rgba(0,0,0,0.8)',

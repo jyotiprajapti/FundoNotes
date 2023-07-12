@@ -2,7 +2,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import theme from '../utilities/StylingConstants';
 const NoteCard = props => {
-  console.log(props);
   return (
     <View style={props.toggle ? styles.gridItem : styles.container}>
      
@@ -34,7 +33,8 @@ const styles = StyleSheet.create({
     margin: theme.spacing.m,
   },
 gridItem:{
-backgroundColor: theme.colors.box1,
+borderColor: theme.colors.background,
+borderWidth: 0.5,
 margin: theme.spacing.s,
 borderRadius: theme.spacing.xs,
 width: theme.width.width3,

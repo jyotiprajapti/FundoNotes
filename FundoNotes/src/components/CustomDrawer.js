@@ -1,9 +1,25 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React,{useEffect} from 'react';
+import { useDispatch } from 'react-redux';
 import theme from '../utilities/StylingConstants';
-import Feather from 'react-native-vector-icons/Feather';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather'
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import { fetchLabel } from '../services/LabelServices';
+import { labelsData } from '../redux/Action';
+import { useSelector } from 'react-redux';
 const CustomDrawer = ({navigation}) => {
+  const dispatch = useDispatch();
+  const getLabels = async () => {
+    const labelData = await fetchLabel(user.uid);
+    dispatch(labelsData(labelData));
+   
+  };
+  const dataLabel = useSelector(state => state.reducer.labelData);
+  useEffect(() => {
+    const subscribe = navigation.addListener('focus', () => getLabels());
+    return subscribe;
+
+  }, []);
   return (
     <View style={styles.container}>
       <View style = {styles.conatiner2}><Text style = {styles.mainText}>Fundo</Text>
