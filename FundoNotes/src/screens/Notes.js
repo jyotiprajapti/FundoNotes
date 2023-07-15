@@ -14,15 +14,18 @@ import TopBar from '../components/TopBar';
 import EmptyIcon from '../components/EmptyIcon';
 import {fetchNote} from '../services/NoteServices';
 import NoteCard from '../components/NoteCard';
+import  PushNotification  from 'react-native-push-notification';
 import {FlatList} from 'react-native-gesture-handler';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+import { Button } from 'react-native-paper';
+
 const Notes = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const [show, setShow] = useState(true);
   const [notes, setNotes] = useState([]);
   const [pinNotes, setPinNotes] = useState([]);
   const getNotes = async () => {
-    const notesData = await fetchNote(user.uid);
+    const notesData = await fetchNote(user?.uid);
     const pin = notesData.filter(
       note => note.Pindata && !note.ArchiveData && !note.DeleteData,
     );
@@ -32,9 +35,9 @@ const Notes = ({navigation}) => {
     );
     setNotes(other);
     setShow(false);
-  }; 
+  };
 
-const toggle = useSelector (state=>state.reducer.toggle)
+  const toggle = useSelector(state => state.reducer.toggle);
 
   const handleEditNote = item => {
     setShow(true);
@@ -45,13 +48,30 @@ const toggle = useSelector (state=>state.reducer.toggle)
   };
 
   const getUser = async () => {
-    const userDetails = await fetchUser(user.uid);
+    const userDetails = await fetchUser(user?.uid);
   };
+
+  const createChannel = ()=>{
+    PushNotification.createChannel({
+      channelId: 'test-channel',
+      channelName: 'Test cahnnel'
+    });
+    
+  }
+
+  const handleNotification = () =>{
+    PushNotification.localNotification({
+      channelId: 'test-channel',
+      title:"Jyoti",
+      message: "notification is working"
+    })
+  }
+  
 
   useEffect(() => {
     const subscribe = navigation.addListener('focus', () => getNotes());
     getUser();
-
+    createChannel();
     return subscribe;
   }, []);
   return (
@@ -59,7 +79,7 @@ const toggle = useSelector (state=>state.reducer.toggle)
       <View style={styles.header}>
         <TopBar
           searchPhrase="Search your note here"
-          targetScreen= 'Search'
+          targetScreen="Search"
           navigation={navigation}
         />
       </View>
@@ -69,45 +89,36 @@ const toggle = useSelector (state=>state.reducer.toggle)
         ) : (
           <ScrollView nestedScrollEnabled={true}>
             <View>
-              {show &&<ActivityIndicator
-                size={'large'}
-                color={'pink'}
-              />}
+              {show && <ActivityIndicator size={'large'} color={'pink'} />}
               {pinNotes && <Text style={styles.heading}>Pinned</Text>}
               <FlatList
                 data={pinNotes}
-                numColumns={ toggle ? 2:1 }
-                key={toggle ? 2:1 }
-               // keyExtractor={({id}) => id}
+                numColumns={toggle ? 2 : 1}
+                key={toggle ? 2 : 1}
+                // keyExtractor={({id}) => id}
                 renderItem={({item}) => (
                   <TouchableOpacity
                     onPress={() => handleEditNote(item)}
-                    
                     style={toggle && styles.rowContainer}>
-                    <NoteCard {...item} toggle = {toggle} />
+                    <NoteCard {...item} toggle={toggle} />
                   </TouchableOpacity>
                 )}
               />
             </View>
 
             <View>
-              {show && <ActivityIndicator
-                size={'large'}
-                color={'pink'}
-              />}
+              {show && <ActivityIndicator size={'large'} color={'pink'} />}
               {pinNotes && <Text style={styles.heading}>Other</Text>}
 
               <FlatList
-               
                 data={notes}
-                numColumns={ toggle ? 2:1 }
-                key={toggle ? 2:1 }
+                numColumns={toggle ? 2 : 1}
+                key={toggle ? 2 : 1}
                 //keyExtractor={({id}) => id}
                 renderItem={({item}) => (
                   <TouchableOpacity
                     onPress={() => handleEditNote(item)}
-                    style={toggle && styles.rowContainer}
-                    >
+                    style={toggle && styles.rowContainer}>
                     <NoteCard {...item} toggle={toggle} />
                   </TouchableOpacity>
                 )}
@@ -117,7 +128,8 @@ const toggle = useSelector (state=>state.reducer.toggle)
         )}
       </View>
       <View style={styles.footer}>
-        <Footer navigation={navigation} />
+        <Footer navigation={navigation} /> 
+        <Button title = 'notification' onPress={handleNotification}/> 
       </View>
     </View>
   );
@@ -158,7 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    width : "45%"
+    width: '45%',
   },
 });
 export default Notes;

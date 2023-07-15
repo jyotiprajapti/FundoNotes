@@ -1,12 +1,18 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import theme from '../utilities/StylingConstants';
+import { Chip } from 'react-native-paper';
 const NoteCard = props => {
   return (
     <View style={props.toggle ? styles.gridItem : styles.container}>
      
         <Text style={styles.title}>{props.Title}</Text>
         <Text style={styles.note}>{props.Note}</Text>
+        <FlatList data={props.labelData}
+        style = {{flexDirection: 'row',flexWrap: 'wrap'}}
+          renderItem={({item})=><Chip selected={true} style={styles.chip}>
+          {item.labelName}
+        </Chip>} />
     </View>
   );
 };
@@ -39,5 +45,9 @@ margin: theme.spacing.s,
 borderRadius: theme.spacing.xs,
 width: theme.width.width3,
 height: theme.height.secondary3
-}
+},
+chip: {
+  width: 90,
+  margin: 5,
+},
 });

@@ -1,10 +1,10 @@
 import React, {useContext, useState} from 'react';
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  FlatList,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import theme from '../utilities/StylingConstants';
@@ -13,12 +13,16 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createNote, updateNote, deleteNote} from '../services/NoteServices';
 import {AuthContext} from '../navigation/AutenticationProvider';
+import {useSelector} from 'react-redux';
 import Modal3 from '../components/Modal3';
 import Modal4 from '../components/Modal4';
+import {Chip} from 'react-native-paper';
+import Modal5 from '../components/Modal5';
 const CreateNote = ({navigation, route}) => {
   const notesData = route.params?.editData;
   const isDeleted = route.params?.isDeleted;
   const noteId = route.params?.noteId;
+  const labelData = route.params?.labelData || notesData?.labelData;
   const [noteTitle, setNoteTitle] = useState(notesData?.Title || '');
   const [noteContent, setNoteContent] = useState(notesData?.Note || '');
   const [pinData, setPinData] = useState(notesData?.Pindata || false);
@@ -27,8 +31,10 @@ const CreateNote = ({navigation, route}) => {
   );
   const [deleteData, setDeleteData] = useState(notesData?.DeleteData || false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible2, setModalVisible2] = useState(false);
   const [show, setShow] = useState(true);
   const {user} = useContext(AuthContext);
+
   const handlePinClick = () => {
     setPinData(!pinData);
   };
@@ -36,9 +42,11 @@ const CreateNote = ({navigation, route}) => {
   const handleArchiveClick = () => {
     setArchiveData(!archiveData);
   };
+  const dataLabel = useSelector(state => state.reducer.labelData);
+  const date = useSelector(state => state.reducer.date);
+  const time = useSelector(state => state.reducer.time);
 
   const handleBackButton = () => {
-    
     if (noteTitle || noteContent) {
       if (noteId) {
         updateNote(
@@ -49,6 +57,9 @@ const CreateNote = ({navigation, route}) => {
           archiveData,
           deleteData,
           noteId,
+          labelData,
+          date,
+          time
         );
       } else {
         createNote(
@@ -58,6 +69,9 @@ const CreateNote = ({navigation, route}) => {
           pinData,
           archiveData,
           deleteData,
+          labelData,
+          date,
+          time
         );
       }
     }
@@ -67,14 +81,13 @@ const CreateNote = ({navigation, route}) => {
   const handleDelete = () => {
     const data = !deleteData;
     setDeleteData(data);
-    // handleBackButton();
     setShow(true);
     handleModalVisible();
   };
 
   const handleDeleteForever = () => {
     deleteNote(user.uid, noteId);
-   
+
     navigation.navigate('Home');
   };
 
@@ -82,7 +95,10 @@ const CreateNote = ({navigation, route}) => {
     setModalVisible(!modalVisible);
   };
 
-  
+  const handleModalVisible2 = () => {
+    setModalVisible2(!modalVisible2);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -99,7 +115,9 @@ const CreateNote = ({navigation, route}) => {
               />
             </TouchableOpacity>
 
-            <Feather name="bell" size={theme.spacing.l} color="black" />
+            <TouchableOpacity onPress={handleModalVisible2}>
+              <Feather name="bell" size={theme.spacing.l} color="black" />
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleArchiveClick}>
               <Feather
                 name="archive"
@@ -110,10 +128,7 @@ const CreateNote = ({navigation, route}) => {
           </View>
         )}
       </View>
-      <View>
-       
-      
-      </View>
+      <View></View>
 
       <View style={styles.content}>
         <View>
@@ -131,6 +146,16 @@ const CreateNote = ({navigation, route}) => {
             placeholder="Note"
             value={noteContent}
             onChangeText={text => setNoteContent(text)}
+          />
+
+          <FlatList
+            data={labelData}
+            horizontal={true}
+            renderItem={({item}) => (
+              <Chip selected={true} style={styles.chip}>
+                {item.labelName}
+              </Chip>
+            )}
           />
         </View>
       </View>
@@ -174,6 +199,7 @@ const CreateNote = ({navigation, route}) => {
               handleDeleteForever={handleDeleteForever}
             />
           ))}
+        <Modal5 onRequestClose={handleModalVisible2} visible={modalVisible2} />
       </View>
     </View>
   );
@@ -218,6 +244,10 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 3,
+  },
+  chip: {
+    width: 90,
+    margin: 5,
   },
 });
 
