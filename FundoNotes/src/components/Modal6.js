@@ -4,26 +4,23 @@ import {
   StyleSheet,
   Text,
   View,
-
   TouchableOpacity,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import theme from '../utilities/StylingConstants';
-import {useDispatch} from 'react-redux';
 import {dateAndTime} from '../redux/Action';
-const Modal6 = ({visible, onRequestClose}) => {
+import { useDispatch } from 'react-redux';
+const Modal6 = ({visible, onRequestClose, handleModalVisible}) => {
   const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [timePickerVisible, setTimePickerVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [selectedTime, setSelectedtime] = useState(new Date());
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const showDatePicker = () => {
     setDatePickerVisible(true);
   };
 
-  const handleConfirm = (date, time) => {
-    dispatch(dateAndTime(date, time));
+  const handleConfirm = (selectedDate) => {
+    dispatch(dateAndTime(selectedDate));
   };
 
   const hideDatePicker = () => {
@@ -34,19 +31,8 @@ const Modal6 = ({visible, onRequestClose}) => {
     setSelectedDate(date);
     hideDatePicker();
   };
-
-  const showTimePicker = () => {
-    setTimePickerVisible(true);
-  };
-
-  const hideTimePicker = () => {
-    setTimePickerVisible(false);
-  };
-
-  const handleConfirmTime = time => {
-    setSelectedtime(time);
-    hideTimePicker();
-  };
+ 
+  
 
   return (
     <View style={{}}>
@@ -73,11 +59,11 @@ const Modal6 = ({visible, onRequestClose}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.button]}
-                onPress={showTimePicker}>
+                onPress={showDatePicker}>
                 <View>
                   <Text style={styles.textStyle2}>Choose time</Text>
                   <Text style={styles.textStyle2}>
-                    {selectedTime.getTime()}
+                    {selectedDate.getTime()}
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -86,22 +72,18 @@ const Modal6 = ({visible, onRequestClose}) => {
             <DateTimePickerModal
               date={selectedDate}
               isVisible={datePickerVisible}
-              mode="date"
+              mode="datetime"
               onConfirm={handleConfirmDate}
               onCancel={hideDatePicker}
             />
-            <DateTimePickerModal
-              date={selectedTime}
-              isVisible={timePickerVisible}
-              mode="time"
-              onConfirm={handleConfirmTime}
-              onCancel={hideTimePicker}
-            />
-          </View>
-          <TouchableOpacity
-            onPress={() => handleConfirm(selectedDate, selectedTime)}>
-            <Text>Save</Text>
+           
+            <TouchableOpacity
+            onPress={() => handleConfirm(selectedDate, selectedDate)}>
+            <Text style = {{color: 'black'}} >Save</Text>
+            <TouchableOpacity onPress={handleModalVisible}/>
           </TouchableOpacity>
+          </View>
+          
         </View>
       </Modal>
     </View>

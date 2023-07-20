@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 const usersCollection = firestore().collection('Users');
-export const createNote = async (uid, title, note, pindata, archiveData,deleteData,labelData,reminderDate,reminderTime) => {
+export const createNote = async (uid, title, note, pindata, archiveData,deleteData,labelData,reminderDate) => {
   usersCollection
     .doc(uid)
     .collection('Notes')
@@ -12,7 +12,6 @@ export const createNote = async (uid, title, note, pindata, archiveData,deleteDa
       DeleteData : deleteData,
       labelData: labelData,
       reminderDate: reminderDate,
-      reminderTime: reminderTime
     });
 };
 
@@ -31,7 +30,7 @@ export const fetchNote = async uid => {
   return notesData;
 };
 
-export const updateNote =  (uid, title, note, pindata, archiveData, deleteData, noteId, labelData,reminderDate,reminderTime) => {
+export const updateNote =  (uid, title, note, pindata, archiveData, deleteData, noteId, labelData,reminderDate) => {
  usersCollection
     .doc(uid)
     .collection('Notes')
@@ -44,7 +43,6 @@ export const updateNote =  (uid, title, note, pindata, archiveData, deleteData, 
       DeleteData: deleteData,
       labelData: labelData,
       reminderDate: reminderDate,
-      reminderTime: reminderTime
     });
 };
 

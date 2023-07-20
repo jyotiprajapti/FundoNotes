@@ -13,7 +13,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createNote, updateNote, deleteNote} from '../services/NoteServices';
 import {AuthContext} from '../navigation/AutenticationProvider';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Modal3 from '../components/Modal3';
 import Modal4 from '../components/Modal4';
 import {Chip} from 'react-native-paper';
@@ -34,7 +34,7 @@ const CreateNote = ({navigation, route}) => {
   const [modalVisible2, setModalVisible2] = useState(false);
   const [show, setShow] = useState(true);
   const {user} = useContext(AuthContext);
-
+const dispatch = useDispatch()
   const handlePinClick = () => {
     setPinData(!pinData);
   };
@@ -43,9 +43,8 @@ const CreateNote = ({navigation, route}) => {
     setArchiveData(!archiveData);
   };
   const dataLabel = useSelector(state => state.reducer.labelData);
-  const date = useSelector(state => state.reducer.date);
-  const time = useSelector(state => state.reducer.time);
-
+  const date = useSelector(state => state.reducer.dateTime);
+console.log("date",date)
   const handleBackButton = () => {
     if (noteTitle || noteContent) {
       if (noteId) {
@@ -58,8 +57,7 @@ const CreateNote = ({navigation, route}) => {
           deleteData,
           noteId,
           labelData,
-          date,
-          time
+          date
         );
       } else {
         createNote(
@@ -70,12 +68,11 @@ const CreateNote = ({navigation, route}) => {
           archiveData,
           deleteData,
           labelData,
-          date,
-          time
+          date
         );
       }
     }
-
+setModalVisible2(false)
     navigation.goBack();
   };
   const handleDelete = () => {
@@ -154,9 +151,10 @@ const CreateNote = ({navigation, route}) => {
             renderItem={({item}) => (
               <Chip selected={true} style={styles.chip}>
                 {item.labelName}
-              </Chip>
+              </Chip> 
             )}
           />
+          
         </View>
       </View>
       <View style={styles.bottom}>

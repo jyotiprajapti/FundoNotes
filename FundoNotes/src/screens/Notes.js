@@ -18,6 +18,7 @@ import  PushNotification  from 'react-native-push-notification';
 import {FlatList} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
 import { Button } from 'react-native-paper';
+import { createTable } from '../services/NoteSqliteServices';
 
 const Notes = ({navigation}) => {
   const {user} = useContext(AuthContext);
@@ -72,6 +73,7 @@ const Notes = ({navigation}) => {
     const subscribe = navigation.addListener('focus', () => getNotes());
     getUser();
     createChannel();
+    createTable();
     return subscribe;
   }, []);
   return (

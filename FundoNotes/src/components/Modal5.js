@@ -10,11 +10,16 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import theme from '../utilities/StylingConstants';
 import Modal6 from './Modal6';
 const Modal5 = ({visible, onRequestClose}) => {
-    const [modalVisible,setModalVisible] = useState(false)
-    const handleModalVisible = () => {
-        setModalVisible(!modalVisible);
-      };
+    const [datePickerVisible, setDatePickerVisible] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const showDatePicker = () => {
+      setDatePickerVisible(true);
+    };
 
+    const handleConfirmDate = date => {
+      setSelectedDate(date);
+      hideDatePicker();
+    };
 
   return (
     <View style={styles.centerdView}>
@@ -49,7 +54,7 @@ const Modal5 = ({visible, onRequestClose}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.touchable}
-              onPress={handleModalVisible}
+              onPress={showDatePicker}
               >
               <AntDesign
                 name="clockcircleo"
@@ -59,10 +64,17 @@ const Modal5 = ({visible, onRequestClose}) => {
               <Text style={styles.text}>Choose date & time</Text>
               
             </TouchableOpacity>
+            <DateTimePickerModal
+              date={selectedDate}
+              isVisible={datePickerVisible}
+              mode="datetime"
+              onConfirm={handleConfirmDate}
+              onCancel={hideDatePicker}
+            />
+           
           </View>
         </View>
       </Modal>
-      <Modal6 onRequestClose={handleModalVisible} visible={modalVisible} />
     </View>
   );
 };
