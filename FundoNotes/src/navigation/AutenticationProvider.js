@@ -23,7 +23,7 @@ export const AutenticationProvider = ({children}) => {
               email,
               password,
             );
-            setUser(userDetails.user.uid);
+            setUser(userDetails.user?.uid);
           } catch (e) {
             const temp = FirebaseValidation(e.code);
             errorCallback(temp);
@@ -35,13 +35,13 @@ export const AutenticationProvider = ({children}) => {
               email,
               password,
             );
-            setUser(userDetails.user.uid);
+            setUser(userDetails.user?.uid);
             addUser(
               email,
               fullName,
               phoneNumber,
               password,
-              userDetails.user.uid,
+              userDetails.user?.uid,
             );
           } catch (e) {
             console.log(e);

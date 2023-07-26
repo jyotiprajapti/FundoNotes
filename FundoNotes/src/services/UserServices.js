@@ -8,7 +8,6 @@ export const fetchUser = async (uid)=>{
  
 return await usersCollection.doc(uid).get().then(item=>{
   const data = item.data()
-  console.log(data)
   return data;
 });
 }

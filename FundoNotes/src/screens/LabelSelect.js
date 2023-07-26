@@ -35,7 +35,7 @@ const LabelSelect = ({navigation}) => {
   };
 
   const getLabels = async () => {
-    const labelData = await fetchLabel(user.uid);
+    const labelData = await fetchLabel(user?.uid);
     dispatch(labelsData(labelData));
     setloading(false);
   };

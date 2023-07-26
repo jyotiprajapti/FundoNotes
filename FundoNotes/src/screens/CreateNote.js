@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   TextInput,
@@ -7,17 +7,19 @@ import {
   FlatList,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
+import PushNotification from 'react-native-push-notification';
 import theme from '../utilities/StylingConstants';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createNote, updateNote, deleteNote} from '../services/NoteServices';
 import {AuthContext} from '../navigation/AutenticationProvider';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import Modal3 from '../components/Modal3';
 import Modal4 from '../components/Modal4';
 import {Chip} from 'react-native-paper';
 import Modal5 from '../components/Modal5';
+import {addNoteSQL} from '../services/NoteSqliteServices';
 const CreateNote = ({navigation, route}) => {
   const notesData = route.params?.editData;
   const isDeleted = route.params?.isDeleted;
@@ -32,9 +34,20 @@ const CreateNote = ({navigation, route}) => {
   const [deleteData, setDeleteData] = useState(notesData?.DeleteData || false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(notesData?.reminderDate|| '');
   const [show, setShow] = useState(true);
   const {user} = useContext(AuthContext);
-const dispatch = useDispatch()
+
+  const handleNotification = () => {
+    PushNotification.localNotificationSchedule({
+      channelId: 'test-channel',
+      title: 'Jyoti scheduled it',
+      message: 'schedule notification is working',
+      date: selectedDate,
+      allowWhileIdle: true,
+    });
+  };
+
   const handlePinClick = () => {
     setPinData(!pinData);
   };
@@ -42,14 +55,12 @@ const dispatch = useDispatch()
   const handleArchiveClick = () => {
     setArchiveData(!archiveData);
   };
-  const dataLabel = useSelector(state => state.reducer.labelData);
-  const date = useSelector(state => state.reducer.dateTime);
-console.log("date",date)
+
   const handleBackButton = () => {
     if (noteTitle || noteContent) {
       if (noteId) {
         updateNote(
-          user.uid,
+          user?.uid,
           noteTitle,
           noteContent,
           pinData,
@@ -57,22 +68,31 @@ console.log("date",date)
           deleteData,
           noteId,
           labelData,
-          date
+          selectedDate,
         );
       } else {
         createNote(
-          user.uid,
+          user?.uid,
           noteTitle,
           noteContent,
           pinData,
           archiveData,
           deleteData,
           labelData,
-          date
+          selectedDate,
+        );
+        addNoteSQL(
+          noteTitle,
+          noteContent,
+          archiveData,
+          pinData,
+          deleteData,
         );
       }
+      handleNotification();
     }
-setModalVisible2(false)
+    
+    setModalVisible2(false);
     navigation.goBack();
   };
   const handleDelete = () => {
@@ -92,7 +112,8 @@ setModalVisible2(false)
     setModalVisible(!modalVisible);
   };
 
-  const handleModalVisible2 = () => {
+  const handleModalVisible2 = date => {
+    setDeleteData(date);
     setModalVisible2(!modalVisible2);
   };
 
@@ -151,10 +172,10 @@ setModalVisible2(false)
             renderItem={({item}) => (
               <Chip selected={true} style={styles.chip}>
                 {item.labelName}
-              </Chip> 
+              </Chip>
             )}
           />
-          
+         
         </View>
       </View>
       <View style={styles.bottom}>
@@ -197,7 +218,12 @@ setModalVisible2(false)
               handleDeleteForever={handleDeleteForever}
             />
           ))}
-        <Modal5 onRequestClose={handleModalVisible2} visible={modalVisible2} />
+        <Modal5
+          onRequestClose={handleModalVisible2}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          visible={modalVisible2}
+        />
       </View>
     </View>
   );
@@ -246,6 +272,7 @@ const styles = StyleSheet.create({
   chip: {
     width: 90,
     margin: 5,
+    color: theme.colors.background
   },
 });
 

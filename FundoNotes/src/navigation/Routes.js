@@ -19,7 +19,7 @@ return subscriber;
   },[]);
 
   if(initialising) return null;
-  console.log("user is shown here",user)
+ 
 
   return(
     

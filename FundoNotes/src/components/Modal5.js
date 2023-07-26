@@ -8,17 +8,21 @@ import {
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import theme from '../utilities/StylingConstants';
-import Modal6 from './Modal6';
-const Modal5 = ({visible, onRequestClose}) => {
+import DateTimePicker from 'react-native-modal-datetime-picker';
+const Modal5 = ({visible, onRequestClose,selectedDate,setSelectedDate}) => {
     const [datePickerVisible, setDatePickerVisible] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    
     const showDatePicker = () => {
       setDatePickerVisible(true);
+    };
+    const hideDatePicker = () => {
+      setDatePickerVisible(false);
+      onClose();
     };
 
     const handleConfirmDate = date => {
       setSelectedDate(date);
-      hideDatePicker();
+       
     };
 
   return (
@@ -64,14 +68,13 @@ const Modal5 = ({visible, onRequestClose}) => {
               <Text style={styles.text}>Choose date & time</Text>
               
             </TouchableOpacity>
-            <DateTimePickerModal
-              date={selectedDate}
+            <DateTimePicker
+            
               isVisible={datePickerVisible}
               mode="datetime"
               onConfirm={handleConfirmDate}
               onCancel={hideDatePicker}
             />
-           
           </View>
         </View>
       </Modal>

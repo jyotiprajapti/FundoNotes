@@ -26,15 +26,15 @@ const dispatch = useDispatch();
 
   const {user} = useContext(AuthContext);
   const getUser = async () => {
-    const userDetails = await fetchUser(user.uid);
+    const userDetails = await fetchUser(user?.uid);
     setProfile(userDetails?.profilePic);
   }
 const getProfile = ()=>{
-  if(user.photoURL){
-    setProfile(user.photoURL)
+  if(user?.photoURL){
+    setProfile(user?.photoURL)
   }
-  else if(user.profilePic){
-    setProfile(user.profilePic)
+  else if(user?.profilePic){
+    setProfile(user?.profilePic)
   }
 }
 

@@ -12,13 +12,12 @@ import {fetchUser} from '../services/UserServices';
 import Footer from '../components/Footer';
 import TopBar from '../components/TopBar';
 import EmptyIcon from '../components/EmptyIcon';
-import {fetchNote} from '../services/NoteServices';
+import {addNote, fetchNote} from '../services/NoteServices';
 import NoteCard from '../components/NoteCard';
 import  PushNotification  from 'react-native-push-notification';
 import {FlatList} from 'react-native-gesture-handler';
 import {useSelector} from 'react-redux';
-import { Button } from 'react-native-paper';
-import { createTable } from '../services/NoteSqliteServices';
+import { createTable, getNotesSQL } from '../services/NoteSqliteServices';
 
 const Notes = ({navigation}) => {
   const {user} = useContext(AuthContext);
@@ -26,13 +25,15 @@ const Notes = ({navigation}) => {
   const [notes, setNotes] = useState([]);
   const [pinNotes, setPinNotes] = useState([]);
   const getNotes = async () => {
+    
     const notesData = await fetchNote(user?.uid);
-    const pin = notesData.filter(
+     //const notesData = await getNotesSQL();
+    const pin = notesData?.filter(
       note => note.Pindata && !note.ArchiveData && !note.DeleteData,
     );
     setPinNotes(pin);
-    const other = notesData.filter(
-      note => !note.Pindata && !note.ArchiveData && !note.DeleteData,
+    const other = notesData?.filter(
+      note => !note?.Pindata && !note?.ArchiveData && !note?.DeleteData,
     );
     setNotes(other);
     setShow(false);
@@ -97,7 +98,8 @@ const Notes = ({navigation}) => {
                 data={pinNotes}
                 numColumns={toggle ? 2 : 1}
                 key={toggle ? 2 : 1}
-                // keyExtractor={({id}) => id}
+                scrollEnabled = {false}
+                // keyExtractor={({item}) => item}
                 renderItem={({item}) => (
                   <TouchableOpacity
                     onPress={() => handleEditNote(item)}
@@ -115,8 +117,9 @@ const Notes = ({navigation}) => {
               <FlatList
                 data={notes}
                 numColumns={toggle ? 2 : 1}
+                scrollEnabled = {false}
                 key={toggle ? 2 : 1}
-                //keyExtractor={({id}) => id}
+                // keyExtractor={({item}) => item.noteId}
                 renderItem={({item}) => (
                   <TouchableOpacity
                     onPress={() => handleEditNote(item)}
@@ -131,7 +134,6 @@ const Notes = ({navigation}) => {
       </View>
       <View style={styles.footer}>
         <Footer navigation={navigation} /> 
-        <Button title = 'notification' onPress={handleNotification}/> 
       </View>
     </View>
   );

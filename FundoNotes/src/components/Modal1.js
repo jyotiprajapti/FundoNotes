@@ -17,7 +17,7 @@ const Modal1 = ({modalVisible, setModalVisible}) => {
 
   const getUser = async () => {
  
-    const userDetails = await fetchUser(user.uid);
+    const userDetails = await fetchUser(user?.uid);
     setUserData(userDetails);
     setProfile(userDetails?.profilePic)
   };
@@ -54,7 +54,7 @@ const Modal1 = ({modalVisible, setModalVisible}) => {
       await storage.ref(fileName).putFile(uploadUri);
 
       const url = storage.ref(fileName).getDownloadURL();
-      updateUser(user.uid, url);
+      updateUser(user?.uid, url);
     } catch (e) {
       console.log(e);
     }

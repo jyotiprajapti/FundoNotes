@@ -3,7 +3,6 @@ import { LABEL_DATA } from "./Constants";
 const initialState = {
     toggle : false,
     labelData: [],
-    dateTime:new Date()
 }
 
 export const reducer = (state= initialState, action )=>{
@@ -20,11 +19,7 @@ export const reducer = (state= initialState, action )=>{
             ...state,
           labelData:  action.payload
         };
-        case DATE_AND_TIME:
-            return{
-                ...state,
-              dateTime: action.payload
-            };
+        
         default : return state
     }
  

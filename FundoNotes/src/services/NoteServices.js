@@ -27,6 +27,7 @@ export const fetchNote = async uid => {
     data.id = documentSnapshot.id;
     notesData.push(data);
   });
+ 
   return notesData;
 };
 
@@ -53,3 +54,39 @@ export const deleteNote =  (uid, noteId)=>
     .collection('Notes')
     .doc(noteId).delete()
 }
+
+export const addNote = async (noteId, noteData, uid, callback) => {
+  try {
+    await DB.transaction(async txn => {
+      noteData.Pinned = noteData.Pinned ? 1 : 0;
+      noteData.Archive = noteData.Archive ? 1 : 0;
+      noteData.Trash = noteData.Trash ? 1 : 0;
+      noteData.IsList = noteData.IsList ? 1 : 0;
+      await txn.executeSql(
+        'INSERT INTO FundooNotes (ID,noteId,Title ,Note ,Archive ,Pinned ,Remainder,Trash,BackgroundColor,IsList,List) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+        [
+          uid,
+          noteId,
+          noteData.Title,
+          noteData.Note,
+          noteData.Archive,
+          noteData.Pinned,
+          noteData.Remainder,
+          noteData.Trash,
+          noteData.BackgroundColor,
+          noteData.IsList,
+          JSON.stringify(noteData.List),
+        ],
+        () => {
+          console.log('Inserted');
+        },
+        error => {
+          console.log('Sqlite', error);
+        },
+      );
+    });
+    callback();
+  } catch (error) {
+    console.log(error.code);
+  }
+};
